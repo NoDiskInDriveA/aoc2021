@@ -33,7 +33,6 @@ def main():
     ox = int(rec_partition(lines, pred_mcv).pop(), base=2)
     co = int(rec_partition(lines, pred_lcv).pop(), base=2)
     print('%u', ox*co)
-    pass
 
 
 if __name__ == '__main__':
