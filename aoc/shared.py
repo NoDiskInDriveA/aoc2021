@@ -1,4 +1,5 @@
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
+from typing import TypeVar
 
 
 class Array2D:
@@ -35,3 +36,19 @@ class Array2D:
         for y in range(0, self.dim):
             r += ' '.join([str(n).rjust(2, '0') for n in self.data[y * self.dim:(y + 1) * self.dim]]) + "\n"
         return r
+
+
+T = TypeVar('T')
+
+
+def partition(seq: Iterable[T], fn: Callable[[T], bool]) -> list[list[T]]:
+    """
+    Partitions an iterable into two, based on the application of fn on each item
+    :param seq: iterable of T
+    :param fn: function callable with T as argument, returns True if element goes into first partition, False otherwise
+    :return: list of two lists containing the partitions
+    """
+    a, b = [], []
+    for item in seq:
+        (a if fn(item) else b).append(item)
+    return [a, b]
