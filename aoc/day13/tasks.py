@@ -1,6 +1,5 @@
 from collections import namedtuple
 from functools import reduce
-from aoc.shared import partition
 
 Point = namedtuple('Point', ['x', 'y'])
 Fold = namedtuple('Fold', ['axis', 'position'])
@@ -20,13 +19,11 @@ def get_input() -> tuple[set[Point], list[Fold]]:
 
 
 def fold_x(points: set[Point], x: int) -> set[Point]:
-    to_fold, to_keep = partition(points, lambda point: point.x >= x)
-    return set(to_keep).union({Point(2 * x - point.x, point.y) for point in to_fold})
+    return set(map(lambda p: Point(2 * x - p.x if p.x >= x else p.x, p.y), points))
 
 
 def fold_y(points: set[Point], y: int) -> set[Point]:
-    to_fold, to_keep = partition(points, lambda point: point.y >= y)
-    return set(to_keep).union({Point(point.x, 2 * y - point.y) for point in to_fold})
+    return set(map(lambda p: Point(p.x, 2 * y - p.y if p.y >= y else p.y), points))
 
 
 def fold(points: set[Point], f: Fold) -> set[Point]:
