@@ -18,19 +18,11 @@ def get_input() -> tuple[set[Point], list[Fold]]:
     return points, folds
 
 
-def fold_x(points: set[Point], x: int) -> set[Point]:
-    return set(map(lambda p: Point(2 * x - p.x if p.x >= x else p.x, p.y), points))
-
-
-def fold_y(points: set[Point], y: int) -> set[Point]:
-    return set(map(lambda p: Point(p.x, 2 * y - p.y if p.y >= y else p.y), points))
-
-
 def fold(points: set[Point], f: Fold) -> set[Point]:
     if f.axis == 'x':
-        return fold_x(points, f.position)
+        return set(map(lambda p: Point(2 * f.position - p.x if p.x >= f.position else p.x, p.y), points))
     elif f.axis == 'y':
-        return fold_y(points, f.position)
+        return set(map(lambda p: Point(p.x, 2 * f.position - p.y if p.y >= f.position else p.y), points))
     else:
         raise ValueError('Unknown axis %s' % f.axis)
 
@@ -44,23 +36,13 @@ def display_points(points: set[Point], scale_x: int = 1):
     print(display)
 
 
-def first_task():
+def main():
     points, folds = get_input()
-    for f in folds[0:1]:
-        points = fold(points, f)
+    points = fold(points, folds[0])
     print(len(points))
-
-
-def second_task():
-    points, folds = get_input()
-    for f in folds:
+    for f in folds[1:]:
         points = fold(points, f)
     display_points(points)
-
-
-def main():
-    first_task()
-    second_task()
 
 
 if __name__ == '__main__':
