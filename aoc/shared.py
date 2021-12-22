@@ -1,4 +1,5 @@
-from collections.abc import Callable, Iterable
+from collections import defaultdict
+from collections.abc import Callable, Iterable, Hashable
 from typing import TypeVar
 
 
@@ -39,16 +40,17 @@ class Array2D:
 
 
 T = TypeVar('T')
+U = TypeVar('U', bound=Hashable)
 
 
-def partition(seq: Iterable[T], fn: Callable[[T], bool]) -> list[list[T]]:
+def partition(seq: Iterable[T], fn: Callable[[T], U]) -> dict[U, list[T]]:
     """
-    Partitions an iterable into two, based on the application of fn on each item
+    Partitions an iterable multiple lists, depending on the result of fn called on each item
     :param seq: iterable of T
-    :param fn: function callable with T as argument, returns True if element goes into first partition, False otherwise
+    :param fn: function callable with T as argument, returns partition key
     :return: list of two lists containing the partitions
     """
-    a, b = [], []
+    partitions = defaultdict(list)
     for item in seq:
-        (a if fn(item) else b).append(item)
-    return [a, b]
+        partitions[fn(item)].append(item)
+    return dict(partitions)
